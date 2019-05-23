@@ -4,6 +4,9 @@ from multiselectfield import MultiSelectField
 class Seller(models.Model):
     company_name = models.CharField(max_length=200,verbose_name='Nazwa firmy')
     description = models.CharField(max_length=1000, verbose_name='Opis firmy')
+    def __str__(self):
+        return self.company_name
+
 
 
 class Address(models.Model):

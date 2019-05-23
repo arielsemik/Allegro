@@ -1,26 +1,38 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
 from .models import Product, Category, ProductImages
+from django.template import loader
 
 
 def index(request):
-    return HttpResponse('Strona z produktami')
+    category_list = Category.objects.all()
+    template = loader.get_template('products/index.html')
+    context =  {'category_list': category_list}
+    return HttpResponse(template.render(context, request))
 
-def product_list(request, category = None, customer = None):
-    categories = Category.objects.all()
+
+
+
+def product_list(request, category_id = None):
+    c = get_object_or_404(Category, pk=category_id)
+
+
     products = Product.objects.filter(available = True)
-    if category and customer:
-        products = products.filter(category = category, customer= customer)
-    elif customer:
-        products = products.filter(customer= customer)
-    elif category:
-        products = products.filter(category = category)
+    template = loader.get_template('products/productlist.html')
 
-    return render(request, 'products/productlist.html', {'cusatomer': customer, 'category': category, 'categories': categories, 'products': products})
 
-def product_detail(request, id):
-    product = get_object_or_404(Product, id=id, available = True)
-    product_image = get_object_or_404(ProductImages, product = id)
-    seller = get_object_or_404(Product, id=id)
-    return render(request, 'products/productdetails.html', {'product': product, 'image': product_image, 'seller': seller})
+    products = products.filter(product_category= category_id)
+    context = {'products': products}
+    return HttpResponse(template.render(context, request))
+
+def product_detail(request, product_id):
+    #product = get_object_or_404(Product, id=id, available = True)
+    #product_image = get_object_or_404(ProductImages, product = id)
+    #seller = get_object_or_404(Product, id=id)
+    namep = get_object_or_404(Product, id = product_id)
+
+    template = loader.get_template('products/productdetails.html')
+    context = {'id': product_id, 'productname': namep.name}
+
+    return HttpResponse(template.render(context, request))
 

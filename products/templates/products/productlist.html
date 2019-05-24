@@ -1,0 +1,12 @@
+{% if products %}
+
+<ul>
+{% for one_prod in products %}
+<li><a href="{%  url 'product_detail' one_prod.id %}" >Nazwa produktu: {{ one_prod.name }} </br>Firma: {{ one_prod.seller }} </a>  </li>
+
+
+{% endfor %}
+</ul>
+
+
+{% endif %}

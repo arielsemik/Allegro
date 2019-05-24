@@ -1,0 +1,12 @@
+{% if category_list %}
+
+<ul>
+{% for one_cat in category_list %}
+<li><a href="{%  url 'product_list_by_category' one_cat.id %}" >{{ one_cat.cat_name }} </a>  </li>
+
+
+{% endfor %}
+</ul>
+
+
+{% endif %}
